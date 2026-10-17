@@ -493,25 +493,28 @@
 
 .code-scroll {
   overflow: auto;
-  max-height: 640px;
+  max-height: 760px;
 }
 
 .code {
   font: 13px/1.65 var(--mono);
   tab-size: 4;
   padding: 10px 0;
-  min-width: max-content;
 }
 
+/* One source line: number, code, then its increment badges. Badges that do not fit
+   beside the code move to a row of their own under it (.wrapped, set by explorer.js). */
 .code-line {
-  display: grid;
-  grid-template-columns: 44px auto 1fr;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   padding-right: 16px;
   transition: background 0.25s ease;
 }
 
 .code-line .ln {
+  flex: none;
+  width: 44px;
   text-align: right;
   padding-right: 14px;
   color: color-mix(in srgb, var(--muted) 65%, transparent);
@@ -519,18 +522,77 @@
 }
 
 .code-line .src {
+  flex: none;
   white-space: pre;
 }
 
 .code-line .inc {
-  justify-self: start;
-  margin-left: 16px;
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
+  margin-left: 16px;
 }
 
-.code-line.dim {
-  opacity: 0.38;
+.code-line.wrapped .inc {
+  margin-left: 44px;
+  padding: 2px 0 6px;
+}
+
+/* Each function in its own frame, with its name and scores on top. */
+.fn-block {
+  margin: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.fn-block .code-line {
+  padding-left: 0;
+}
+
+.fn-block.active {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 16%, transparent);
+}
+
+.fn-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 4px 14px;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 6px 12px;
+  font: 600 12.5px var(--font);
+  text-align: left;
+  cursor: pointer;
+}
+
+.fn-head .fn-name {
+  font-family: var(--mono);
+}
+
+.fn-head .fn-scores {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.fn-block.active .fn-head {
+  background: color-mix(in srgb, var(--brand) 12%, var(--surface-2));
+}
+
+.ok {
+  color: var(--ok);
+}
+
+.no {
+  color: var(--bad);
 }
 
 .code-line.hot {
@@ -606,38 +668,95 @@
   gap: 14px;
 }
 
-.fn-list {
+.compare {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
 }
 
-.fn-list button {
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--muted);
-  font: 600 13px var(--mono);
-  border-radius: 8px;
-  padding: 5px 9px;
-  cursor: pointer;
-}
-
-.fn-list button[aria-pressed="true"] {
-  color: var(--text);
-  border-color: var(--brand);
-}
-
-.fn-list button .ok {
-  color: var(--ok);
-}
-
-.fn-list button .no {
-  color: var(--bad);
-}
-
-#meters {
+.compare .side {
+  flex: 1;
   display: grid;
-  gap: 16px;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.compare .side.current {
+  border-color: var(--line);
+  background: var(--surface-2);
+}
+
+.compare .side-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.compare .side .muted {
+  font-size: 13px;
+}
+
+.compare .arrow {
+  color: var(--muted);
+  font-size: 20px;
+}
+
+.meters-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-weight: 650;
+  font-size: 14px;
+}
+
+.meters-head span:first-child {
+  font-family: var(--mono);
+}
+
+.fn-table-card {
+  padding: 8px;
+  overflow-x: auto;
+}
+
+.fn-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.fn-table th,
+.fn-table td {
+  padding: 6px 8px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.fn-table th:first-child,
+.fn-table td:first-child {
+  text-align: left;
+  font-family: var(--mono);
+}
+
+.fn-table th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.fn-table tbody tr {
+  cursor: pointer;
+  border-top: 1px solid var(--line);
+}
+
+.fn-table tbody tr:hover,
+.fn-table tbody tr.active {
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
 }
 
 .meter {
@@ -866,6 +985,7 @@
   .badge,
   .meter-fill,
   .code-line,
+  .fn-block,
   .docs a.card {
     transition: none;
   }

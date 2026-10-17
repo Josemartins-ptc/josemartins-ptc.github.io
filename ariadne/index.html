@@ -171,8 +171,8 @@
           <h2>See where every point comes from</h2>
           <p class="lead">
             Pick a language and press play: each line lights up with what it adds. Then flip the
-            switch to the refactored version: the same behavior, every function within its limits.
-            All numbers are Ariadne's own output.
+            switch to the refactored version: the same behavior, split into small functions that
+            are each within every limit. All numbers are Ariadne's own output.
           </p>
         </div>
         <div class="explorer-bar reveal">
@@ -190,8 +190,14 @@
             <div class="code-scroll"><div class="code" id="code"></div></div>
           </div>
           <div class="scoreboard">
-            <div class="fn-list" id="fn-list" aria-label="Functions"></div>
-            <div class="card" id="meters"></div>
+            <div class="card compare" id="compare"></div>
+            <div class="card">
+              <div class="meters-head" id="meters-head"></div>
+              <div id="meters"></div>
+            </div>
+            <div class="card fn-table-card">
+              <table class="fn-table" id="fn-table" aria-label="Every function in the file"></table>
+            </div>
             <div class="verdict" id="verdict" role="status"></div>
           </div>
         </div>

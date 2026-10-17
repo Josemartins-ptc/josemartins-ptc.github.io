@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add("js")</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ariadne — a complexity guard for Claude Code</title>
+  <meta name="description" content="Ariadne scores every function Claude Code writes or changes and keeps it refactoring until each one meets your complexity, length, parameter and nesting limits. Go, Rust, TypeScript and JavaScript.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css">
+  <link rel="stylesheet" href="ariadne.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="../" aria-label="noshio home">
+        <svg viewBox="0 0 32 32" fill="none" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path class="spool" d="M23.4 9.6A9.5 9.5 0 1 0 25.5 16"/><path class="tail" d="M25.5 16H30"/></svg>
+        noshio
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="#demo" class="hide-sm">Demo</a>
+        <a href="#explorer" class="hide-sm">Scores</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/Josemartins-ptc/ariadne-plugin" class="hide-sm">GitHub</a>
+        <button class="theme-toggle" type="button" data-theme-toggle></button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <span class="eyebrow reveal">Claude Code plugin · v0.1.0</span>
+          <h1 class="reveal" data-delay="1"><svg class="logo" viewBox="0 0 96 96" aria-hidden="true"><path class="logo-walls" d="M12 12H24 M12 24V36 M12 24H24 M12 36V48 M12 48V60 M12 60V72 M12 72V84 M12 84H24 M24 12H36 M24 24H36 M24 36V48 M24 48V60 M24 60V72 M24 72V84 M24 84H36 M36 12H48 M36 24V36 M36 24H48 M36 36V48 M36 48V60 M36 60V72 M36 72H48 M36 84H48 M48 12H60 M48 24H60 M48 36V48 M48 36H60 M48 48V60 M48 60H60 M48 72H60 M48 84H60 M60 12H72 M60 36H72 M60 48V60 M60 60H72 M60 84H72 M72 12V24 M72 12H84 M72 24V36 M72 48H84 M72 60V72 M72 84H84 M84 12V24 M84 24V36 M84 36V48 M84 48V60 M84 60V72"/><path class="logo-thread" d="M5.4 18 L18 18 L30 18 L42 18 L54 18 L66 18 L66 30 L54 30 L42 30 L42 42 L42 54 L42 66 L54 66 L66 66 L66 78 L78 78 L90.6 78"/></svg>Ariadne</h1>
+          <p class="tagline reveal" data-delay="1">The thread out of <em>tangled code</em>.</p>
+          <p class="lead reveal" data-delay="2">
+            Ariadne scores every function Claude writes or changes. When one is too complex, too
+            long or too deeply nested, Claude is told exactly why and refactors it before the turn
+            can end. Then your lint and tests run.
+          </p>
+          <div class="cmd reveal" data-delay="3">
+            <code>claude plugin marketplace add Josemartins-ptc/ariadne-plugin</code>
+            <button class="copy" type="button" data-copy="claude plugin marketplace add Josemartins-ptc/ariadne-plugin">Copy</button>
+          </div>
+          <div class="hero-links reveal" data-delay="4">
+            <a class="btn primary" href="#install">Install</a>
+            <a class="btn" href="#demo">Watch it work</a>
+          </div>
+        </div>
+        <div class="maze-box reveal" data-delay="2" id="maze" tabindex="0"
+             aria-label="Interactive labyrinth. Move the pointer, or use the arrow keys, and the thread finds its way to that spot.">
+          <span class="maze-hint">Move your pointer: the thread finds the way</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="section-tight">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Why</span>
+          <h2>Agents write code fast. Nobody checks it as fast.</h2>
+          <p class="lead">
+            A function grows one reasonable change at a time, until nobody wants to touch it.
+            Reviews catch it late, when the agent that wrote it has long lost the context.
+            Ariadne catches it during the turn.
+          </p>
+        </div>
+        <div class="problem">
+          <div class="card reveal">
+            <div class="big">1 edit</div>
+            <p>How long a too-complex function goes unnoticed: Ariadne checks right after every edit, while Claude still has the context.</p>
+          </div>
+          <div class="card reveal" data-delay="1">
+            <div class="big">5</div>
+            <p>Scores per function: cyclomatic, cognitive, length, parameters and nesting. One rule set, the same in every language.</p>
+          </div>
+          <div class="card reveal" data-delay="2">
+            <div class="big">100%</div>
+            <p>Deterministic. No model judges your code: the same file gives the same scores on every machine, byte for byte.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Five scores -->
+    <section>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">What it measures</span>
+          <h2>Five scores, one limit each</h2>
+          <p class="lead">A function fails when any score is above its limit; equal passes. The defaults below can be changed per project, language or folder.</p>
+        </div>
+        <div class="grid scores">
+          <div class="card score-card reveal">
+            <svg viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 18h6l4-8 4 16 4-8h6"/></svg>
+            <h3>Cyclomatic</h3>
+            <p>How many paths run through the function.</p>
+            <span class="limit">limit 10 · Go 15</span>
+          </div>
+          <div class="card score-card reveal" data-delay="1">
+            <svg viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 10h20M12 18h16M16 26h12"/></svg>
+            <h3>Cognitive</h3>
+            <p>How hard it is to read. Nested code costs more.</p>
+            <span class="limit">limit 15</span>
+          </div>
+          <div class="card score-card reveal" data-delay="2">
+            <svg viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 6v24M26 6v24M10 12h16M10 24h16"/></svg>
+            <h3>Length</h3>
+            <p>How many lines the function has.</p>
+            <span class="limit">limit 80 · .tsx/.jsx 120</span>
+          </div>
+          <div class="card score-card reveal" data-delay="3">
+            <svg viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 18c0-6 3-10 6-10M28 18c0-6-3-10-6-10M8 18c0 6 3 10 6 10M28 18c0 6-3 10-6 10"/><circle cx="18" cy="18" r="1.5"/></svg>
+            <h3>Parameters</h3>
+            <p>How many parameters it takes.</p>
+            <span class="limit">limit 7</span>
+          </div>
+          <div class="card score-card reveal" data-delay="4">
+            <svg viewBox="0 0 36 36" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 8h20v20H8zM13 13h10v10H13z"/></svg>
+            <h3>Nesting</h3>
+            <p>How deep its ifs, loops and switches go.</p>
+            <span class="limit">limit 4</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <section id="demo">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Watch a turn</span>
+          <h2>Claude writes it. Ariadne pushes back. Claude fixes it.</h2>
+          <p class="lead">
+            A recorded Claude Code session, replayed. Ariadne's message and Claude's refactor are
+            the real ones, word for word.
+          </p>
+        </div>
+        <div class="demo reveal">
+          <div class="demo-steps" id="demo-steps" aria-hidden="true">
+            <span class="chip"><span class="dot"></span>Claude writes</span>
+            <span class="chip"><span class="dot"></span>Ariadne blocks</span>
+            <span class="chip"><span class="dot"></span>Claude refactors</span>
+            <span class="chip"><span class="dot"></span>Turn ends green</span>
+          </div>
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span>claude — shop</span>
+              <span class="controls">
+                <button type="button" id="demo-toggle">Pause</button>
+                <button type="button" id="demo-replay">Replay</button>
+              </span>
+            </div>
+            <div class="term-body" id="term" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Explorer -->
+    <section id="explorer">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Score explorer</span>
+          <h2>See where every point comes from</h2>
+          <p class="lead">
+            Pick a language and press play: each line lights up with what it adds. Then flip the
+            switch to the refactored version: the same behavior, every function within its limits.
+            All numbers are Ariadne's own output.
+          </p>
+        </div>
+        <div class="explorer-bar reveal">
+          <div class="tabs" role="tablist" aria-label="Language" id="lang-tabs"></div>
+          <label class="switch"><input type="checkbox" id="refactored-switch"> Refactored</label>
+        </div>
+        <div class="explorer reveal">
+          <div class="code-panel">
+            <div class="code-head">
+              <span id="code-file">cart.go</span>
+              <span class="explorer-actions">
+                <button class="btn" type="button" id="explore-play">▶ Play the count</button>
+              </span>
+            </div>
+            <div class="code-scroll"><div class="code" id="code"></div></div>
+          </div>
+          <div class="scoreboard">
+            <div class="fn-list" id="fn-list" aria-label="Functions"></div>
+            <div class="card" id="meters"></div>
+            <div class="verdict" id="verdict" role="status"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loop -->
+    <section class="section-tight">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">How it works</span>
+          <h2>A gate inside Claude's own loop</h2>
+        </div>
+        <div class="loop reveal">
+          <div class="loop-thread" aria-hidden="true"></div>
+          <div class="card">
+            <span class="step">01 · edit</span>
+            <h3>After every edit</h3>
+            <p>Ariadne scores the functions Claude just changed. Over a limit? Claude hears which one and why, right away.</p>
+          </div>
+          <div class="card">
+            <span class="step">02 · refactor</span>
+            <h3>Claude simplifies</h3>
+            <p>Guard clauses, early returns, named helpers. The limits are your rules: Claude is told so, and Ariadne blocks its edits to the settings file.</p>
+          </div>
+          <div class="card">
+            <span class="step">03 · stop</span>
+            <h3>Before the turn ends</h3>
+            <p>Every changed function is checked again, then your lint and tests run. Something still red? Claude keeps working, up to 5 rounds by default.</p>
+          </div>
+          <div class="card">
+            <span class="step">04 · done</span>
+            <h3>One status line</h3>
+            <p><code>Ariadne ✓ lint passed · 3 functions within limits · tests passed</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Languages -->
+    <section class="section-tight">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Languages</span>
+          <h2>Go, Rust, TypeScript and JavaScript</h2>
+          <p class="lead">Each language gets its own lint and test commands, worked out per module or package. Mixed repositories are fine: a Go service with a TypeScript frontend just works.</p>
+        </div>
+        <div class="card langs reveal">
+          <table>
+            <thead>
+              <tr><th>Language</th><th>Cyclomatic</th><th>Cognitive</th><th>Length</th><th>Params</th><th>Nesting</th><th>Lint · tests</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Go</td><td>15</td><td>15</td><td>80</td><td>7</td><td>4</td><td>go vet · go test</td></tr>
+              <tr><td>Rust</td><td>10</td><td>15</td><td>80</td><td>7</td><td>4</td><td>cargo clippy · cargo test</td></tr>
+              <tr><td>TypeScript</td><td>10</td><td>15</td><td>80 (.tsx 120)</td><td>7</td><td>4</td><td>type-check · npm test</td></tr>
+              <tr><td>JavaScript</td><td>10</td><td>15</td><td>80 (.jsx 120)</td><td>7</td><td>4</td><td>type-check · npm test</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Install -->
+    <section id="install">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Install</span>
+          <h2>Two commands. No Rust, no build.</h2>
+          <p class="lead">Ready-built for macOS and Linux, on Apple silicon, ARM and Intel.</p>
+        </div>
+        <div class="install">
+          <div class="card reveal">
+            <h3>1 · Add Ariadne to Claude Code</h3>
+            <div class="cmd">
+              <code>claude plugin marketplace add Josemartins-ptc/ariadne-plugin</code>
+              <button class="copy" type="button" data-copy="claude plugin marketplace add Josemartins-ptc/ariadne-plugin">Copy</button>
+            </div>
+            <div class="cmd">
+              <code>claude plugin install ariadne@ariadne-plugins</code>
+              <button class="copy" type="button" data-copy="claude plugin install ariadne@ariadne-plugins">Copy</button>
+            </div>
+            <p class="muted">Already in a session? Run <code>/reload-plugins</code>. No SSH key for GitHub? Use <code>https://github.com/Josemartins-ptc/ariadne-plugin.git</code> as the address.</p>
+          </div>
+          <div class="card reveal" data-delay="1">
+            <h3>2 · Set up a project</h3>
+            <div class="cmd slash">
+              <code>/ariadne:init</code>
+              <button class="copy" type="button" data-copy="/ariadne:init">Copy</button>
+            </div>
+            <ol>
+              <li>Pick the languages the project uses.</li>
+              <li>Take the defaults, or set your own limits and commands.</li>
+              <li>Check the file it writes, <code>.ariadne.toml</code>, and commit it.</li>
+            </ol>
+            <p class="muted">Then ask for a change. Every turn ends with an <code>Ariadne</code> status line.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Docs -->
+    <section class="section-tight">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Documentation</span>
+          <h2>Everything, in plain words</h2>
+        </div>
+        <div class="grid docs">
+          <a class="card reveal" href="https://github.com/Josemartins-ptc/ariadne-plugin/blob/main/docs/checks.md"><h3>What Ariadne checks</h3><p>The five scores, with examples.</p></a>
+          <a class="card reveal" data-delay="1" href="https://github.com/Josemartins-ptc/ariadne-plugin/blob/main/docs/how-it-works.md"><h3>How it works</h3><p>Hooks, the stop gate, subagents, known limits.</p></a>
+          <a class="card reveal" data-delay="2" href="https://github.com/Josemartins-ptc/ariadne-plugin/blob/main/docs/configuration.md"><h3>Configuration</h3><p>.ariadne.toml, limits, lint and test commands.</p></a>
+          <a class="card reveal" href="https://github.com/Josemartins-ptc/ariadne-plugin/blob/main/docs/metrics.md"><h3>How scores are counted</h3><p>The exact counting rules.</p></a>
+          <a class="card reveal" data-delay="1" href="https://github.com/Josemartins-ptc/ariadne-plugin/blob/main/docs/languages.md"><h3>Languages</h3><p>What is reported in each language.</p></a>
+          <a class="card reveal" data-delay="2" href="https://github.com/Josemartins-ptc/ariadne-plugin/blob/main/docs/messages.md"><h3>Messages</h3><p>Every message Ariadne shows, explained.</p></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© <span data-year>2026</span> noshio · Ariadne is licensed under Apache 2.0</span>
+      <span><a href="../">noshio</a> · <a href="https://github.com/Josemartins-ptc/ariadne-plugin">GitHub</a></span>
+    </div>
+  </footer>
+
+  <script src="../assets/site.js"></script>
+  <script src="data.js"></script>
+  <script src="maze.js"></script>
+  <script src="demo.js"></script>
+  <script src="explorer.js"></script>
+</body>
+</html>

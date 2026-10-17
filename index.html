@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add("js")</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>noshio — tools for building with AI agents</title>
+  <meta name="description" content="noshio makes small, dependable developer tools for working with AI coding agents. First up: Ariadne, a complexity guard for Claude Code.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <style>
+    .home-hero {
+      padding: 96px 0 72px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .home-hero h1 {
+      max-width: 15ch;
+    }
+
+    .home-hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-thread {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-thread path {
+      fill: none;
+      stroke: var(--thread);
+      stroke-width: 2;
+      stroke-linecap: round;
+      opacity: 0.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .products {
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    }
+
+    .product {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transform-style: preserve-3d;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      overflow: hidden;
+    }
+
+    .product::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--thread) 14%, transparent), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .product:hover {
+      box-shadow: var(--shadow);
+      border-color: color-mix(in srgb, var(--thread) 45%, var(--line));
+    }
+
+    .product:hover::after {
+      opacity: 1;
+    }
+
+    .product-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .product-top img {
+      width: 56px;
+      height: 56px;
+    }
+
+    .product h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .product .tag {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .product p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .product .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .product .go {
+      margin-top: auto;
+      font-weight: 600;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .product .go span {
+      transition: transform 0.2s ease;
+    }
+
+    .product:hover .go span {
+      transform: translateX(4px);
+    }
+
+    .upcoming {
+      border-style: dashed;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      color: var(--muted);
+      min-height: 260px;
+    }
+
+    .upcoming svg {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 12px;
+      stroke: var(--muted);
+    }
+
+    .principles {
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    }
+
+    .principles .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .principles .num {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--thread);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .product,
+      .product .go span {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="./" aria-label="noshio home">
+        <svg viewBox="0 0 32 32" fill="none" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path class="spool" d="M23.4 9.6A9.5 9.5 0 1 0 25.5 16"/><path class="tail" d="M25.5 16H30"/></svg>
+        noshio
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="#products" class="hide-sm">Products</a>
+        <a href="ariadne/">Ariadne</a>
+        <a href="https://github.com/Josemartins-ptc" class="hide-sm">GitHub</a>
+        <button class="theme-toggle" type="button" data-theme-toggle></button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="home-hero">
+      <svg class="hero-thread" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
+        <path id="hero-thread" d="M-20 500 C 250 505, 520 497, 760 470 S 1010 330, 1080 220 S 1170 100, 1240 110"/>
+      </svg>
+      <div class="wrap">
+        <span class="eyebrow reveal">noshio · developer tools</span>
+        <h1 class="reveal" data-delay="1">Small tools that keep <em>AI-written code</em> easy to live with.</h1>
+        <p class="lead reveal" data-delay="2">
+          AI agents write code fast. noshio makes the guard rails: dependable, deterministic tools
+          that plug into the agent's own loop, so problems are fixed while the agent still has the
+          context, not weeks later in review.
+        </p>
+        <div class="hero-actions reveal" data-delay="3">
+          <a class="btn primary" href="ariadne/">Meet Ariadne</a>
+          <a class="btn" href="#products">All products</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="section-tight">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Products</span>
+          <h2>What's on the bench</h2>
+        </div>
+        <div class="grid products">
+          <a class="card product reveal" href="ariadne/" data-tilt>
+            <div class="product-top">
+              <img src="ariadne/logo.svg" alt="" width="56" height="56">
+              <div>
+                <h3>Ariadne</h3>
+                <span class="tag">Claude Code plugin · v0.1.0</span>
+              </div>
+            </div>
+            <p>
+              A complexity guard for Claude Code. It scores every function Claude writes or changes,
+              and when one is too complex, too long or too nested, Claude refactors it before the
+              turn can end.
+            </p>
+            <div class="chips">
+              <span class="chip">Go</span>
+              <span class="chip">Rust</span>
+              <span class="chip">TypeScript</span>
+              <span class="chip">JavaScript</span>
+            </div>
+            <span class="go">Learn more <span aria-hidden="true">→</span></span>
+          </a>
+
+          <div class="card upcoming reveal" data-delay="1">
+            <svg viewBox="0 0 48 48" fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 5" aria-hidden="true"><circle cx="24" cy="24" r="18"/><path d="M24 16v16M16 24h16" stroke-dasharray="none"/></svg>
+            <strong>More on the way</strong>
+            <span>New tools land here as they ship.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">How noshio builds</span>
+          <h2>Three rules for every tool</h2>
+        </div>
+        <div class="grid principles">
+          <div class="card reveal">
+            <span class="num">01</span>
+            <h3>Deterministic</h3>
+            <p>The same input gives the same answer, every time and on every machine. No model in the loop, no surprises.</p>
+          </div>
+          <div class="card reveal" data-delay="1">
+            <span class="num">02</span>
+            <h3>Inside the loop</h3>
+            <p>Feedback reaches the agent while it is still working, so it fixes the problem itself.</p>
+          </div>
+          <div class="card reveal" data-delay="2">
+            <span class="num">03</span>
+            <h3>Nothing to babysit</h3>
+            <p>One install, sensible defaults, plain text settings. No accounts, no servers, no tracking.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© <span data-year>2026</span> noshio</span>
+      <span><a href="ariadne/">Ariadne</a> · <a href="https://github.com/Josemartins-ptc">GitHub</a></span>
+    </div>
+  </footer>
+
+  <script src="assets/site.js"></script>
+  <script>
+    // Hero thread draws itself; cards follow the pointer with a soft glow and tilt.
+    (() => {
+      const thread = document.getElementById("hero-thread");
+      if (thread && !window.noshio.reducedMotion()) {
+        const length = thread.getTotalLength();
+        thread.style.strokeDasharray = String(length);
+        thread.style.strokeDashoffset = String(length);
+        thread.getBoundingClientRect();
+        thread.style.transition = "stroke-dashoffset 2.6s cubic-bezier(.6,.1,.2,1) .3s";
+        thread.style.strokeDashoffset = "0";
+      }
+      if (window.noshio.reducedMotion()) return;
+      document.querySelectorAll("[data-tilt]").forEach((card) => {
+        card.addEventListener("pointermove", (event) => {
+          const box = card.getBoundingClientRect();
+          const x = (event.clientX - box.left) / box.width;
+          const y = (event.clientY - box.top) / box.height;
+          card.style.setProperty("--mx", `${x * 100}%`);
+          card.style.setProperty("--my", `${y * 100}%`);
+          card.style.transform = `perspective(900px) rotateX(${(0.5 - y) * 4}deg) rotateY(${(x - 0.5) * 5}deg) translateY(-2px)`;
+        });
+        card.addEventListener("pointerleave", () => {
+          card.style.transform = "";
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

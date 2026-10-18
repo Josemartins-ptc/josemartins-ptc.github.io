@@ -22,6 +22,7 @@
       <nav class="site-nav" aria-label="Main">
         <a href="#demo" class="hide-sm">Demo</a>
         <a href="#explorer" class="hide-sm">Scores</a>
+        <a href="#measured" class="hide-sm">Results</a>
         <a href="#install">Install</a>
         <a href="https://github.com/Josemartins-ptc/ariadne-plugin" class="hide-sm">GitHub</a>
         <button class="theme-toggle" type="button" data-theme-toggle></button>
@@ -237,6 +238,62 @@
       </div>
     </section>
 
+    <!-- Measured -->
+    <section id="measured">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Measured</span>
+          <h2>Does it make the code better? We tested it.</h2>
+          <p class="lead">We gave Claude Code six small coding tasks in Go, TypeScript, JavaScript and Rust. Each task ran three times without Ariadne and three times with it, on two Claude models. Then we measured the code with tools Ariadne does not use, and asked a reviewer that did not know which version was which.</p>
+        </div>
+
+        <div class="problem m-stats">
+          <div class="card reveal">
+            <div class="big">36<small> of 36</small></div>
+            <p>runs with Ariadne where <strong>every function met the limits</strong>. Without it: 0 of 36.</p>
+          </div>
+          <div class="card reveal" data-delay="1">
+            <div class="big">34<small> of 36</small></div>
+            <p>times a <strong>blind reviewer preferred the code written with Ariadne</strong>, asked which version it would rather maintain.</p>
+          </div>
+          <div class="card reveal" data-delay="2">
+            <div class="big">100<small>%</small></div>
+            <p>of the hidden tests passed, <strong>with and without Ariadne</strong>. Simpler code, same correctness.</p>
+          </div>
+        </div>
+
+        <div class="m-toolbar reveal">
+          <span class="m-toolbar-label">Model writing the code</span>
+          <div class="tabs" role="tablist" aria-label="Model" id="m-model"></div>
+        </div>
+
+        <div class="m-grid">
+          <div class="card m-card reveal">
+            <h3>The most complex function, task by task</h3>
+            <p class="m-note">Cyclomatic complexity of the worst function, measured by lizard (not by Ariadne). Lower is simpler. Median of 3 runs.</p>
+            <div class="m-legend"><span class="m-key m-without"></span>without Ariadne <span class="m-key m-with"></span>with Ariadne</div>
+            <div class="m-bars" id="m-tasks"></div>
+          </div>
+
+          <div class="card m-card reveal">
+            <h3>Good code stays good</h3>
+            <p class="m-note">Later, we asked Claude for a change to each result, this time with Ariadne switched off. Worst function before and after that change:</p>
+            <div class="m-slopes" id="m-after"></div>
+            <p class="m-takeaway" id="m-after-text"></p>
+          </div>
+
+          <div class="card m-card reveal">
+            <h3>What it costs, in tokens</h3>
+            <p class="m-note">Tokens Claude used for the first task. Median of 18 runs.</p>
+            <div class="m-bars" id="m-tokens"></div>
+            <p class="m-takeaway" id="m-tokens-text"></p>
+          </div>
+        </div>
+
+        <p class="m-fine reveal">Small tasks written for this test, three runs each, so read the numbers as a strong direction, not a law. The reviewer was also a Claude model, never the one that wrote the code, and saw every pair twice with the order swapped. <a href="https://github.com/Josemartins-ptc/ariadne-plugin/tree/main/evaluation">Method, tasks and every run →</a></p>
+      </div>
+    </section>
+
     <!-- Languages -->
     <section class="section-tight">
       <div class="wrap">
@@ -330,5 +387,6 @@
   <script src="maze.js"></script>
   <script src="demo.js"></script>
   <script src="explorer.js"></script>
+  <script src="measured.js"></script>
 </body>
 </html>

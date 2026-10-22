@@ -1,4 +1,4 @@
-// Generated from real Ariadne 0.1.0 output: `ariadne check --format json` on the samples,
+// Generated from real Ariadne 0.2.0 output: `ariadne check --format json` on the samples,
 // and a recorded Claude Code turn (the block message and the refactor are verbatim).
 window.ARIADNE_DATA = {
  "samples": [
@@ -1080,6 +1080,306 @@ window.ARIADNE_DATA = {
         "construct": "case",
         "nesting": 1,
         "cognitive": 0,
+        "cyclomatic": 1
+       }
+      ],
+      "limits": {
+       "cyclomatic": 10,
+       "cognitive": 15,
+       "length": 80,
+       "parameters": 7,
+       "nesting": 4
+      },
+      "pass": true
+     }
+    ]
+   }
+  },
+  {
+   "key": "java",
+   "name": "Java",
+   "file": "Shipping.java",
+   "tangled": {
+    "code": "public class Shipping {\n    public static int cost(Order order) {\n        int cost = 0;\n        if (order.items().isEmpty()) {\n            return 0;\n        }\n        for (Item item : order.items()) {\n            if (item.digital()) {\n                continue;\n            }\n            if (item.weightGrams() > 20000) {\n                cost += 2500;\n            } else if (item.weightGrams() > 5000) {\n                cost += 1200;\n            } else {\n                cost += 500;\n            }\n            if (item.fragile() && !order.express()) {\n                cost += 300;\n            }\n        }\n        if (order.express()) {\n            cost = cost * 2;\n        }\n        if (order.member() && cost > 0) {\n            if (order.total() >= 5000 || order.country().equals(\"PT\")) {\n                cost = 0;\n            } else {\n                cost = cost - cost / 10;\n            }\n        }\n        return cost;\n    }\n}\n",
+    "functions": [
+     {
+      "name": "Shipping.cost",
+      "span": {
+       "start": 2,
+       "end": 33
+      },
+      "cyclomatic": 13,
+      "cognitive": 18,
+      "length": 32,
+      "parameters": 1,
+      "nesting": 2,
+      "increments": [
+       {
+        "line": 4,
+        "construct": "if",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 7,
+        "construct": "loop",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 8,
+        "construct": "if",
+        "nesting": 1,
+        "cognitive": 2,
+        "cyclomatic": 1
+       },
+       {
+        "line": 11,
+        "construct": "if",
+        "nesting": 1,
+        "cognitive": 2,
+        "cyclomatic": 1
+       },
+       {
+        "line": 13,
+        "construct": "else if",
+        "nesting": 1,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 15,
+        "construct": "else",
+        "nesting": 1,
+        "cognitive": 1,
+        "cyclomatic": 0
+       },
+       {
+        "line": 18,
+        "construct": "if",
+        "nesting": 1,
+        "cognitive": 2,
+        "cyclomatic": 1
+       },
+       {
+        "line": 18,
+        "construct": "&& sequence",
+        "nesting": 1,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 22,
+        "construct": "if",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 25,
+        "construct": "if",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 25,
+        "construct": "&& sequence",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 26,
+        "construct": "if",
+        "nesting": 1,
+        "cognitive": 2,
+        "cyclomatic": 1
+       },
+       {
+        "line": 26,
+        "construct": "|| sequence",
+        "nesting": 1,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 28,
+        "construct": "else",
+        "nesting": 1,
+        "cognitive": 1,
+        "cyclomatic": 0
+       }
+      ],
+      "limits": {
+       "cyclomatic": 10,
+       "cognitive": 15,
+       "length": 80,
+       "parameters": 7,
+       "nesting": 4
+      },
+      "pass": false
+     }
+    ]
+   },
+   "refactored": {
+    "code": "public class Shipping {\n    public static int cost(Order order) {\n        int cost = 0;\n        for (Item item : order.items()) {\n            cost += itemCost(item, order.express());\n        }\n        if (order.express()) {\n            cost = cost * 2;\n        }\n        return memberPrice(order, cost);\n    }\n\n    private static int itemCost(Item item, boolean express) {\n        if (item.digital()) {\n            return 0;\n        }\n        int fragileFee = item.fragile() && !express ? 300 : 0;\n        return weightCost(item.weightGrams()) + fragileFee;\n    }\n\n    private static int weightCost(int grams) {\n        if (grams > 20000) {\n            return 2500;\n        }\n        return grams > 5000 ? 1200 : 500;\n    }\n\n    private static int memberPrice(Order order, int cost) {\n        if (!order.member() || cost == 0) {\n            return cost;\n        }\n        boolean free = order.total() >= 5000 || order.country().equals(\"PT\");\n        return free ? 0 : cost - cost / 10;\n    }\n}\n",
+    "functions": [
+     {
+      "name": "Shipping.cost",
+      "span": {
+       "start": 2,
+       "end": 11
+      },
+      "cyclomatic": 3,
+      "cognitive": 2,
+      "length": 10,
+      "parameters": 1,
+      "nesting": 1,
+      "increments": [
+       {
+        "line": 4,
+        "construct": "loop",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 7,
+        "construct": "if",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       }
+      ],
+      "limits": {
+       "cyclomatic": 10,
+       "cognitive": 15,
+       "length": 80,
+       "parameters": 7,
+       "nesting": 4
+      },
+      "pass": true
+     },
+     {
+      "name": "Shipping.itemCost",
+      "span": {
+       "start": 13,
+       "end": 19
+      },
+      "cyclomatic": 4,
+      "cognitive": 3,
+      "length": 7,
+      "parameters": 2,
+      "nesting": 1,
+      "increments": [
+       {
+        "line": 14,
+        "construct": "if",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 17,
+        "construct": "conditional",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 17,
+        "construct": "&& sequence",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       }
+      ],
+      "limits": {
+       "cyclomatic": 10,
+       "cognitive": 15,
+       "length": 80,
+       "parameters": 7,
+       "nesting": 4
+      },
+      "pass": true
+     },
+     {
+      "name": "Shipping.weightCost",
+      "span": {
+       "start": 21,
+       "end": 26
+      },
+      "cyclomatic": 3,
+      "cognitive": 2,
+      "length": 6,
+      "parameters": 1,
+      "nesting": 1,
+      "increments": [
+       {
+        "line": 22,
+        "construct": "if",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 25,
+        "construct": "conditional",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       }
+      ],
+      "limits": {
+       "cyclomatic": 10,
+       "cognitive": 15,
+       "length": 80,
+       "parameters": 7,
+       "nesting": 4
+      },
+      "pass": true
+     },
+     {
+      "name": "Shipping.memberPrice",
+      "span": {
+       "start": 28,
+       "end": 34
+      },
+      "cyclomatic": 5,
+      "cognitive": 4,
+      "length": 7,
+      "parameters": 2,
+      "nesting": 1,
+      "increments": [
+       {
+        "line": 29,
+        "construct": "if",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 29,
+        "construct": "|| sequence",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 32,
+        "construct": "|| sequence",
+        "nesting": 0,
+        "cognitive": 1,
+        "cyclomatic": 1
+       },
+       {
+        "line": 33,
+        "construct": "conditional",
+        "nesting": 0,
+        "cognitive": 1,
         "cyclomatic": 1
        }
       ],

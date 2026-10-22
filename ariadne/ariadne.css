@@ -732,7 +732,7 @@
 
 .fn-table th,
 .fn-table td {
-  padding: 6px 8px;
+  padding: 6px 6px;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -741,6 +741,7 @@
 .fn-table td:first-child {
   text-align: left;
   font-family: var(--mono);
+  overflow-wrap: anywhere;
 }
 
 .fn-table th {

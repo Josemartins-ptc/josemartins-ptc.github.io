@@ -28,6 +28,7 @@
     ts: "async await break case catch class const continue default else export extends for function if import in instanceof let new of return switch throw try type typeof while",
     js: "async await break case catch class const continue default else export extends for function if import in instanceof let new of return switch throw try typeof while",
     rust: "as break const continue else enum fn for if impl in let loop match mod move mut pub ref return self Self struct trait type use where while Ok Err Some None",
+    java: "boolean break case catch class continue default do else extends final for if import int new private public return static switch this throw try void while",
   };
   // Constructs that do not deepen nesting (metrics.md, Code smells: Nesting).
   const FLAT = (construct) => construct.endsWith("sequence") || construct === "case" || construct === "labeled jump";
@@ -161,7 +162,7 @@
     const rows = fns()
       .map(
         (f, i) => `<tr data-fn="${i}" tabindex="0" class="${i === active ? "active" : ""}">
-          <td>${escape(f.name)}</td>
+          <td>${escape(f.name).replace(/\./g, ".<wbr>")}</td>
           ${METRICS.map(([key]) => `<td class="${f[key] > f.limits[key] ? "no" : ""}">${f[key]}</td>`).join("")}
           <td class="${f.pass ? "ok" : "no"}">${f.pass ? "✓" : "✗"}</td>
         </tr>`,

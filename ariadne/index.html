@@ -5,10 +5,10 @@
   <script>document.documentElement.classList.add("js")</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ariadne — a complexity guard for Claude Code</title>
-  <meta name="description" content="Ariadne scores every function Claude Code writes or changes and keeps it refactoring until each one meets your complexity, length, parameter and nesting limits. Go, Rust, TypeScript and JavaScript.">
+  <meta name="description" content="Ariadne scores every function Claude Code writes or changes and keeps it refactoring until each one meets your complexity, length, parameter and nesting limits. Go, Rust, TypeScript, JavaScript and Java.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/site.css?v=f9d03f396f">
-  <link rel="stylesheet" href="ariadne.css?v=4d68dfb362">
+  <link rel="stylesheet" href="ariadne.css?v=7906d1603f">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -35,7 +35,7 @@
     <section class="hero">
       <div class="wrap">
         <div>
-          <span class="eyebrow reveal">Claude Code plugin · v0.1.0</span>
+          <span class="eyebrow reveal">Claude Code plugin · v0.2.0</span>
           <h1 class="reveal" data-delay="1"><svg class="logo" viewBox="0 0 96 96" aria-hidden="true"><path class="logo-walls" d="M12 12H24 M12 24V36 M12 24H24 M12 36V48 M12 48V60 M12 60V72 M12 72V84 M12 84H24 M24 12H36 M24 24H36 M24 36V48 M24 48V60 M24 60V72 M24 72V84 M24 84H36 M36 12H48 M36 24V36 M36 24H48 M36 36V48 M36 48V60 M36 60V72 M36 72H48 M36 84H48 M48 12H60 M48 24H60 M48 36V48 M48 36H60 M48 48V60 M48 60H60 M48 72H60 M48 84H60 M60 12H72 M60 36H72 M60 48V60 M60 60H72 M60 84H72 M72 12V24 M72 12H84 M72 24V36 M72 48H84 M72 60V72 M72 84H84 M84 12V24 M84 24V36 M84 36V48 M84 48V60 M84 60V72"/><path class="logo-thread" d="M5.4 18 L18 18 L30 18 L42 18 L54 18 L66 18 L66 30 L54 30 L42 30 L42 42 L42 54 L42 66 L54 66 L66 66 L66 78 L78 78 L90.6 78"/></svg>Ariadne</h1>
           <p class="tagline reveal" data-delay="1">The thread out of <em>tangled code</em>.</p>
           <p class="lead reveal" data-delay="2">
@@ -299,8 +299,8 @@
       <div class="wrap">
         <div class="section-head reveal">
           <span class="eyebrow">Languages</span>
-          <h2>Go, Rust, TypeScript and JavaScript</h2>
-          <p class="lead">Each language gets its own lint and test commands, worked out per module or package. Mixed repositories are fine: a Go service with a TypeScript frontend just works.</p>
+          <h2>Go, Rust, TypeScript, JavaScript and Java</h2>
+          <p class="lead">Each language gets its own lint and test commands, worked out per module, package or build. Java runs one Gradle or Maven command per build, over just the modules you changed. Mixed repositories are fine: a Go service with a TypeScript frontend just works.</p>
         </div>
         <div class="card langs reveal">
           <table>
@@ -312,6 +312,7 @@
               <tr><td>Rust</td><td>10</td><td>15</td><td>80</td><td>7</td><td>4</td><td>cargo clippy · cargo test</td></tr>
               <tr><td>TypeScript</td><td>10</td><td>15</td><td>80 (.tsx 120)</td><td>7</td><td>4</td><td>type-check · npm test</td></tr>
               <tr><td>JavaScript</td><td>10</td><td>15</td><td>80 (.jsx 120)</td><td>7</td><td>4</td><td>type-check · npm test</td></tr>
+              <tr><td>Java</td><td>10</td><td>15</td><td>80</td><td>7</td><td>4</td><td>compile · test (Gradle or Maven)</td></tr>
             </tbody>
           </table>
         </div>
@@ -383,10 +384,10 @@
   </footer>
 
   <script src="../assets/site.js?v=ca4b87633a"></script>
-  <script src="data.js?v=7c82f69b05"></script>
+  <script src="data.js?v=704c608f18"></script>
   <script src="maze.js?v=963820995b"></script>
   <script src="demo.js?v=8e63a3a1ad"></script>
-  <script src="explorer.js?v=24b90f82b4"></script>
+  <script src="explorer.js?v=30bde531e8"></script>
   <script src="measured.js?v=d0dc0b0fbb"></script>
 </body>
 </html>
